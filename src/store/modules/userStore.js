@@ -1,35 +1,47 @@
-// userStore.js
 import { createSlice } from "@reduxjs/toolkit"
-import { setToken, getToken } from "@/utils/token" // 引入本地存储的工具
+import { setToken, getToken, clearToken } from "@/utils/token"
 import { requests } from "@/utils/request"
 
 const userStore = createSlice({
   name: "user",
   initialState: {
-    token: getToken() || "", // 从 localStorage 获取 token
+    token: getToken() || "",
+    userInfo: {},
   },
   reducers: {
-    setUserInfo(state, actions) {
-      state.token = actions.payload
-      console.log("Token saved to Redux:", state.token)
-
-      // 每次更新 token 时同步到 localStorage
+    setUserToken(state, action) {
+      state.token = action.payload
       setToken(state.token)
+    },
+    setUserInfo(state, action) {
+      state.userInfo = action.payload
+    },
+    clearUserInfo(state) {
+      state.token = ""
+      state.userInfo = {}
+      clearToken()
     },
   },
 })
 
-const { setUserInfo } = userStore.actions
+const { setUserToken, setUserInfo, clearUserInfo } = userStore.actions
 
 const userReducer = userStore.reducer
 
 // 异步获取用户信息
-const getUserInfo = (loginForm) => {
+const getUserToken = (loginForm) => {
   return async (dispatch) => {
     const res = await requests.post("/authorizations", loginForm)
-    dispatch(setUserInfo(res.data.data.token)) // 保存到 Redux 和 localStorage
+    dispatch(setUserToken(res.data.data.token)) // 保存到 Redux 和 localStorage
   }
 }
 
-export { getUserInfo }
+const getUserInfo = () => {
+  return async (dispatch) => {
+    const res = await requests.get("/user/profile")
+    dispatch(setUserInfo(res.data.data))
+  }
+}
+
+export { getUserToken, getUserInfo, clearUserInfo }
 export default userReducer

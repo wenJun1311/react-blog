@@ -1,5 +1,5 @@
 import logo from "@/assets/logo.png"
-import { getUserInfo } from "@/store/modules/userStore"
+import { getUserToken } from "@/store/modules/userStore"
 import { Button, Card, Form, Input, message } from "antd"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -9,8 +9,8 @@ const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const onFinish = async (formValue) => {
-    await dispatch(getUserInfo(formValue))
+  const onFinish = (formValue) => {
+    dispatch(getUserToken(formValue))
     navigate("/")
     message.success("登录成功")
   }

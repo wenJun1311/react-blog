@@ -1,3 +1,4 @@
+import { getUserInfo, clearUserInfo } from "@/store/modules/userStore"
 import {
   DiffOutlined,
   EditOutlined,
@@ -5,7 +6,9 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons"
 import { Layout, Menu, Popconfirm } from "antd"
-import { useLocation, useNavigate, Outlet } from "react-router-dom"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import "./Layout.scss"
 
 const { Header, Sider } = Layout
@@ -30,12 +33,24 @@ const items = [
 
 const GeekLayout = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const name = useSelector((state) => state.user.userInfo.name)
+
+  useEffect(() => {
+    dispatch(getUserInfo())
+  }, [dispatch])
+
   const menuClick = (route) => {
     navigate(route.key)
   }
   // 获取当前路径
   const location = useLocation()
   const selectedKey = location.pathname
+
+  const loginOut = () => {
+    dispatch(clearUserInfo())
+    navigate("/login")
+  }
 
   return (
     <Layout className="layout-content">
@@ -44,7 +59,12 @@ const GeekLayout = () => {
         <div className="user-info">
           <span className="user-name">{name}</span>
           <span className="user-logout">
-            <Popconfirm title="是否确认退出？" okText="退出" cancelText="取消">
+            <Popconfirm
+              title="是否确认退出？"
+              okText="退出"
+              cancelText="取消"
+              onClick={loginOut}
+            >
               <LogoutOutlined /> 退出
             </Popconfirm>
           </span>

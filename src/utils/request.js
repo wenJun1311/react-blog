@@ -10,7 +10,6 @@ const requests = axios.create({
 requests.interceptors.request.use(
   (config) => {
     const token = getToken() // 获取 token
-    console.log("Token in request interceptor:", token)
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}` // 设置 Authorization 头
@@ -28,6 +27,12 @@ requests.interceptors.response.use(
     return response
   },
   (error) => {
+    console.dir(error)
+    if (error.response.status === 401) {
+      clearToken()
+      router.navigate("/login")
+      window.location.reload()
+    }
     return Promise.reject(error)
   }
 )
