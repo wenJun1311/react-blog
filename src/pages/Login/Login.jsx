@@ -1,5 +1,5 @@
 import logo from "@/assets/logo.png"
-import { getUserToken } from "@/store/modules/userStore"
+import { fetchUserToken } from "@/store/modules/userStore"
 import { Button, Card, Form, Input, message } from "antd"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -10,7 +10,7 @@ const Login = () => {
   const navigate = useNavigate()
 
   const onFinish = (formValue) => {
-    dispatch(getUserToken(formValue))
+    dispatch(fetchUserToken(formValue))
     navigate("/")
     message.success("登录成功")
   }

@@ -1,6 +1,7 @@
+// userSlice.js
+import { getUserInfo, loginAPI } from "@/api/user/user"
+import { clearToken, getToken, setToken } from "@/utils/token"
 import { createSlice } from "@reduxjs/toolkit"
-import { setToken, getToken, clearToken } from "@/utils/token"
-import { requests } from "@/utils/request"
 
 const userStore = createSlice({
   name: "user",
@@ -28,20 +29,31 @@ const { setUserToken, setUserInfo, clearUserInfo } = userStore.actions
 
 const userReducer = userStore.reducer
 
+// 异步获取用户 token
+const fetchUserToken = (loginForm) => {
+  return async (dispatch) => {
+    try {
+      const res = await loginAPI(loginForm)
+      console.log(res)
+
+      dispatch(setUserToken(res.data.token))
+    } catch (error) {
+      console.error("登录失败", error)
+    }
+  }
+}
+
 // 异步获取用户信息
-const getUserToken = (loginForm) => {
+const fetchUserInfo = () => {
   return async (dispatch) => {
-    const res = await requests.post("/authorizations", loginForm)
-    dispatch(setUserToken(res.data.data.token)) // 保存到 Redux 和 localStorage
+    try {
+      const res = await getUserInfo()
+      dispatch(setUserInfo(res.data.data))
+    } catch (error) {
+      console.error("获取用户信息失败", error)
+    }
   }
 }
 
-const getUserInfo = () => {
-  return async (dispatch) => {
-    const res = await requests.get("/user/profile")
-    dispatch(setUserInfo(res.data.data))
-  }
-}
-
-export { getUserToken, getUserInfo, clearUserInfo }
+export { clearUserInfo, fetchUserInfo, fetchUserToken }
 export default userReducer

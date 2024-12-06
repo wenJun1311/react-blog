@@ -1,4 +1,4 @@
-import { getUserInfo, clearUserInfo } from "@/store/modules/userStore"
+import { fetchUserInfo, clearUserInfo } from "@/store/modules/userStore"
 import {
   DiffOutlined,
   EditOutlined,
@@ -37,7 +37,7 @@ const GeekLayout = () => {
   const name = useSelector((state) => state.user.userInfo.name)
 
   useEffect(() => {
-    dispatch(getUserInfo())
+    dispatch(fetchUserInfo())
   }, [dispatch])
 
   const menuClick = (route) => {

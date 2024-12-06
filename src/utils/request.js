@@ -1,6 +1,6 @@
-// requests.js
 import axios from "axios"
-import { getToken } from "./token" // 引入 token 工具函数
+import { getToken } from "./token"
+import { useNavigate } from "react-router-dom"
 
 const requests = axios.create({
   baseURL: "http://geek.itheima.net/v1_0",
@@ -9,10 +9,9 @@ const requests = axios.create({
 
 requests.interceptors.request.use(
   (config) => {
-    const token = getToken() // 获取 token
-
+    const token = getToken()
     if (token) {
-      config.headers.Authorization = `Bearer ${token}` // 设置 Authorization 头
+      config.headers.Authorization = `Bearer ${token}`
     }
 
     return config
@@ -28,9 +27,10 @@ requests.interceptors.response.use(
   },
   (error) => {
     console.dir(error)
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       clearToken()
-      router.navigate("/login")
+      const navigate = useNavigate()
+      navigate("/login")
       window.location.reload()
     }
     return Promise.reject(error)
