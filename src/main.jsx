@@ -5,6 +5,7 @@ import { RouterProvider } from "react-router-dom"
 import "./index.css"
 import router from "./router/index"
 import store from "./store/idnex"
+import "normalize.css"
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
