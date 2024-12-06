@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom"
 
 import Login from "@/pages/Login/Login"
 import Layout from "@/pages/Layout/Layout"
-import Publish from "@/pages/Publish/Public"
+import Publish from "@/pages/Publish/Publish"
 import Article from "@/pages/Article/Article"
 import Home from "@/pages/Home/Home"
 import AuthRoute from "@/components/AuthRoute/AuthRoute"

@@ -1,6 +1,6 @@
 import axios from "axios"
-import { getToken } from "./token"
 import { useNavigate } from "react-router-dom"
+import { clearToken, getToken } from "./token"
 
 const requests = axios.create({
   baseURL: "http://geek.itheima.net/v1_0",
@@ -13,7 +13,6 @@ requests.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
-
     return config
   },
   (error) => {
@@ -26,7 +25,6 @@ requests.interceptors.response.use(
     return response
   },
   (error) => {
-    console.dir(error)
     if (error.response && error.response.status === 401) {
       clearToken()
       const navigate = useNavigate()

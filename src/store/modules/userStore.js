@@ -36,7 +36,7 @@ const fetchUserToken = (loginForm) => {
       const res = await loginAPI(loginForm)
       console.log(res)
 
-      dispatch(setUserToken(res.data.token))
+      dispatch(setUserToken(res.data.data.token))
     } catch (error) {
       console.error("登录失败", error)
     }
