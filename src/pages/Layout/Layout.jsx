@@ -33,27 +33,34 @@ const items = [
 
 const GeekLayout = () => {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const name = useSelector((state) => state.user.userInfo.name)
+  const onMenuClick = (route) => {
+    console.log("菜单被点击了", route)
+    const path = route.key
+    navigate(path)
+  }
 
+  // 反向高亮
+  // 1. 获取当前路由路径
+  const location = useLocation()
+  console.log(location.pathname)
+  const selectedkey = location.pathname
+
+  // 触发个人用户信息action
+  const dispatch = useDispatch()
   useEffect(() => {
     dispatch(fetchUserInfo())
   }, [dispatch])
 
-  const menuClick = (route) => {
-    navigate(route.key)
-  }
-  // 获取当前路径
-  const location = useLocation()
-  const selectedKey = location.pathname
-
-  const loginOut = () => {
+  // 退出登录确认回调
+  const onConfirm = () => {
+    console.log("确认退出")
     dispatch(clearUserInfo())
     navigate("/login")
   }
 
+  const name = useSelector((state) => state.user.userInfo.name)
   return (
-    <Layout className="layout-content">
+    <Layout>
       <Header className="header">
         <div className="logo" />
         <div className="user-info">
@@ -63,7 +70,7 @@ const GeekLayout = () => {
               title="是否确认退出？"
               okText="退出"
               cancelText="取消"
-              onClick={loginOut}
+              onConfirm={onConfirm}
             >
               <LogoutOutlined /> 退出
             </Popconfirm>
@@ -75,14 +82,14 @@ const GeekLayout = () => {
           <Menu
             mode="inline"
             theme="dark"
-            defaultSelectedKeys={["1"]}
+            selectedKeys={selectedkey}
+            onClick={onMenuClick}
             items={items}
             style={{ height: "100%", borderRight: 0 }}
-            onClick={menuClick}
-            selectedKeys={selectedKey}
           ></Menu>
         </Sider>
         <Layout className="layout-content" style={{ padding: 20 }}>
+          {/* 二级路由的出口 */}
           <Outlet />
         </Layout>
       </Layout>

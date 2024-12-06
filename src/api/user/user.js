@@ -1,4 +1,6 @@
+// 用户相关的所有请求
 import { requests } from "@/utils/request"
+// 1. 登录请求
 
 export const loginAPI = (formData) =>
   requests({
@@ -7,7 +9,9 @@ export const loginAPI = (formData) =>
     data: formData,
   })
 
-export const getUserInfo = () =>
+// 2. 获取用户信息
+
+export const getProfileAPI = () =>
   requests({
     url: "/user/profile",
     method: "GET",

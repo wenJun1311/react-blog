@@ -1,5 +1,5 @@
 // userSlice.js
-import { getUserInfo, loginAPI } from "@/api/user/user"
+import { getProfileAPI, loginAPI } from "@/api/user/user"
 import { clearToken, getToken, setToken } from "@/utils/token"
 import { createSlice } from "@reduxjs/toolkit"
 
@@ -34,8 +34,6 @@ const fetchUserToken = (loginForm) => {
   return async (dispatch) => {
     try {
       const res = await loginAPI(loginForm)
-      console.log(res)
-
       dispatch(setUserToken(res.data.data.token))
     } catch (error) {
       console.error("登录失败", error)
@@ -47,7 +45,7 @@ const fetchUserToken = (loginForm) => {
 const fetchUserInfo = () => {
   return async (dispatch) => {
     try {
-      const res = await getUserInfo()
+      const res = await getProfileAPI()
       dispatch(setUserInfo(res.data.data))
     } catch (error) {
       console.error("获取用户信息失败", error)
